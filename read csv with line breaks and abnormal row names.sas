@@ -1,3 +1,4 @@
+*Deal with line breaks in csv file and convert to sas dataset;
 data _null_;
   infile '/home/huanj126/MBMA_Data_Definition_2015-11-10.csv' recfm=n lrecl=50000;
   file '/home/huanj126/testout.csv' recfm=n;
