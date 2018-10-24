@@ -49,6 +49,7 @@ data aa;
     		end;
     	else
     		do;
+		*incase '0A'x exist in the end of file;
     		if _n_ ne &csvlen  then
   				put " ";
 /*   			checkpoint2=1; */
