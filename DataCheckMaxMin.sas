@@ -1,4 +1,5 @@
 %macro max_min(dsin=,varlist =&charlst) ; 
+title "Source Dataset: &dsin";
 proc contents data = &dsin out = ck noprint;
 run;
 quit ;
@@ -88,9 +89,27 @@ data all;
 	MERGE max2 min2 MISS2 CK;
 	BY _NAME_;
 	IF MAX1=MIN1 THEN MIN1="---SAME AS LEFT---";
+	if _n_ ne 1;
+	rename _NAME_=Var_Name max1=MaxValue min1=MinValueExcptMiss miss1=If_Missing LABEL=Var_Label;
+run;
+
+data all2;
+	set all;
+	if not((strip(MaxValue)="" or strip(MaxValue)=".") and MinValueExcptMiss="---SAME AS LEFT---" and If_Missing=1) ;
+	proc print;
+run;
+
+proc sql noprint;
+	select  Var_Name into : varname   SEPARATED  by " " from all2;
+quit ; 
+
+data all3;
+	Variable_Name="&varname";
+	proc print;
 run;
 
 proc print data=all;
 run;
+
 %mend; 
-%max_min(dsin=data.mh1qg2);
+%max_min(dsin=dataprot.tmm_p);
