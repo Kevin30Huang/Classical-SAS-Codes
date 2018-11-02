@@ -65,9 +65,9 @@ data tmp2;
 			obs&&rank&i
 		%end;;
 	set tmp(rename=(_NAME_=Var_Name _LABEL_=Var_Label));
-	if
 	%if &count ne 1 %then
 		%do;
+		if
 		%do i=2 %to &count;
 			%if &i=2 %then %str(col[1] ne col[2]);
 			%else  %str(or col[1] ne col[&i]);
