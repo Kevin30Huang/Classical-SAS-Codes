@@ -29,8 +29,11 @@ title5 j=l "Variables are listed in alphabetical order";
 	%end;
 
 %reorder_var_alpha(lib=&lib,domain=&domain,output=a);
-proc print data=a;
+data a;
+	set a;
 	where &where;
+	count=_n_;
+	proc print;
 run;
 
 Data rank;
