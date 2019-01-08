@@ -8,7 +8,7 @@ Data filelist;
                FILENAME2=SCAN(filename,-1,"/");
                Core=scan(FILENAME2,1,".");
                put "sas94 " Core +(-1) ".sas -log ../logs/" Core +(-1) 
-               ".log -print ../output/" +(-1) Core ".lst;";
+               ".log -print ../output/" Core +(-1) ".lst;";
 Run;
 %mend;
 
