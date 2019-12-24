@@ -81,15 +81,19 @@ PROC SORT DATA=MISS2;
 	BY _NAME_;
 RUN;
 
-PROC SORT DATA=CK(RENAME=(NAME=_NAME_) KEEP=NAME LABEL);
+PROC SORT DATA=CK(RENAME=(NAME=_NAME_ TYPE=_TYPE) KEEP=NAME LABEL TYPE);
 	BY _NAME_;
 RUN;
 
 data all;
+	length Type $4.;
 	MERGE max2 min2 MISS2 CK;
 	BY _NAME_;
 	IF MAX1=MIN1 THEN MIN1="---SAME AS LEFT---";
 	if _n_ ne 1;
+	if _TYPE=1 then Type="Num";
+	else if _TYPE=2 then Type="Char";
+	drop _Type;
 	rename _NAME_=Var_Name max1=MaxValue min1=MinValueExcptMiss miss1=If_Missing LABEL=Var_Label;
 run;
 
@@ -111,6 +115,6 @@ run;
 proc print data=all;
 run;
 
-%mend; 
+%mend;  
 
 %max_min(dsin=dataprot.tmm_p);
