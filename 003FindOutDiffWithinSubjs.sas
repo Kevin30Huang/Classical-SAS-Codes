@@ -9,6 +9,7 @@ data &output;
 	retain &varlst;
 	set &lib..&domain;
 	rank=_n_;
+	label rank="Observation Number in Original Data";
 run;
 %mend;
 
@@ -33,6 +34,7 @@ data a;
 	set a;
 	where &where;
 	count=_n_;
+	label count="Observation Number in Filtered Data";
 	proc print;
 run;
 
@@ -61,13 +63,25 @@ proc transpose data=a out=tmp prefix=OBS;
 	ID RANK;
 run;
 
+proc sql ;
+    select distinct max(length) into: maxlen
+    from dictionary.columns
+    where upcase(libname) eq upcase("work") and upcase(memname) eq upcase("tmp") 
+    	and upcase(memtype)=upcase("DATA") and name like "OBS%";
+quit;
+
+
 data tmp2;
 	retain Var_Name Var_Label;
-	array col[&count] $200. 
+	array col[&count] $&maxlen. 
 		%do i=1 %to &count;
 			obs&&rank&i
 		%end;;
 	set tmp(rename=(_NAME_=Var_Name _LABEL_=Var_Label));
+	%do i=1 %to &count;
+			col[&i]=strip(col[&i]);
+		%end;
+		
 	%if &count ne 1 %then
 		%do;
 		if
