@@ -96,7 +96,7 @@ run;
 		%if &varlst ne %then
 			%do;
 			data diff_sum_all;
-			length var_name $32.;
+			length var_name $32. diff_value $1.;
 			run;
 			%do k=1 %to %sysfunc(countw(&varlst));
 				%let var_&k=%sysfunc(scan(&varlst, &k," "));
